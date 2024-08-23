@@ -1,0 +1,104 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        /* Styles for the instructions */
+        .instructions {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 12px;
+            color: #444;
+            display: none;
+            text-align: left;
+        }
+
+        .instructions-toggle {
+            cursor: pointer;
+            color: #007BFF;
+            text-decoration: underline;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Music Recommendation System</h1>
+        <!-- Instructions Toggle Link -->
+        <span class="instructions-toggle" onclick="toggleInstructions()">Valence-Arousal (V-A) Space</span>
+
+        <!-- Instructions Box -->
+        <div class="instructions" id="instructions">
+            <strong>Valence-Arousal (V-A) Space</strong>
+            <ul>
+                <li><strong>Valence:</strong> Indicates how pleasant or unpleasant an emotion is. It ranges from negative (unpleasant) to positive (pleasant).</li>
+                <li><strong>Arousal:</strong> Indicates the intensity of the emotion, ranging from low (calm) to high (excited).</li>
+            </ul>
+            <strong>The Four Quadrants (4Q)</strong>
+            <p>Based on the combination of valence and arousal values, emotions are divided into four quadrants:</p>
+            <strong>Quadrant 1 (Q1): High Valence, High Arousal</strong>
+            <ul>
+                <li><strong>Emotions:</strong> Happy, Excited, Joyful</li>
+                <li><strong>Characteristics:</strong> Pleasant and highly energetic</li>
+            </ul>
+            <strong>Quadrant 2 (Q2): Low Valence, High Arousal</strong>
+            <ul>
+                <li><strong>Emotions:</strong> Angry, Anxious, Tense</li>
+                <li><strong>Characteristics:</strong> Unpleasant and highly energetic</li>
+            </ul>
+            <strong>Quadrant 3 (Q3): Low Valence, Low Arousal</strong>
+            <ul>
+                <li><strong>Emotions:</strong> Sad, Depressed, Bored</li>
+                <li><strong>Characteristics:</strong> Unpleasant and low energy</li>
+            </ul>
+            <strong>Quadrant 4 (Q4): High Valence, Low Arousal</strong>
+            <ul>
+                <li><strong>Emotions:</strong> Calm, Relaxed, Content</li>
+                <li><strong>Characteristics:</strong> Pleasant and low energy</li>
+            </ul>
+        </div>
+
+        <!-- Prediction Result Section -->
+        <strong><h2>Prediction Result</h2></strong>
+        <p><strong>Uploaded file:</strong> {{ file_name }}</p>
+        <p><strong>Valence-Arousal Quadrant:</strong> {{ valence_arousal_space }}</p>
+        <p><strong>Selected emotion:</strong> {{ selected_emotion }}</p>
+        <p><strong>Predicted emotion:</strong> {{ predicted_emotion }}</p>
+        
+        <a href="{% url 'predict_emotion' %}">Upload another file</a>
+    </div>
+
+    <script>
+        function toggleInstructions() {
+            var instructions = document.getElementById('instructions');
+            var toggleText = document.querySelector('.instructions-toggle');
+            if (instructions.style.display === 'none' || instructions.style.display === '') {
+                instructions.style.display = 'block';
+                toggleText.textContent = 'Hide Instructions';
+            } else {
+                instructions.style.display = 'none';
+                toggleText.textContent = 'Show Instructions';
+            }
+        }
+    </script>
+</body>
+</html>

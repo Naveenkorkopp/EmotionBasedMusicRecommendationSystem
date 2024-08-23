@@ -1,0 +1,145 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Emotion Prediction</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .instructions {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 12px;
+            color: #444;
+            display: none;
+            text-align: left;
+        }
+
+        .instructions-toggle {
+            cursor: pointer;
+            color: #007BFF;
+            text-decoration: underline;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .spinner {
+            display: none;
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #444444; /* Dark grey */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-message {
+            display: none;
+            color: #444444;
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Music Recommendation System</h1>
+        <!-- Instructions Toggle Link -->
+        <span class="instructions-toggle" onclick="toggleInstructions()">Valence-Arousal (V-A) Space</span>
+
+        <!-- Instructions Box -->
+        <div class="instructions" id="instructions">
+            <strong>Valence-Arousal (V-A) Space</strong>
+            <ul>
+                <li><strong>Valence:</strong> Indicates how pleasant or unpleasant an emotion is. It ranges from negative (unpleasant) to positive (pleasant).</li>
+                <li><strong>Arousal:</strong> Indicates the intensity of the emotion, ranging from low (calm) to high (excited).</li>
+            </ul>
+            <strong>The Four Quadrants (4Q)</strong>
+            <p>Based on the combination of valence and arousal values, emotions are divided into four quadrants:</p>
+            <strong>Quadrant 1 (Q1): High Valence, High Arousal</strong>
+            <ul>
+                <li><strong>Emotions:</strong> Happy, Excited, Joyful</li>
+                <li><strong>Characteristics:</strong> Pleasant and highly energetic</li>
+            </ul>
+            <strong>Quadrant 2 (Q2): Low Valence, High Arousal</strong>
+            <ul>
+                <li><strong>Emotions:</strong> Angry, Anxious, Tense</li>
+                <li><strong>Characteristics:</strong> Unpleasant and highly energetic</li>
+            </ul>
+            <strong>Quadrant 3 (Q3): Low Valence, Low Arousal</strong>
+            <ul>
+                <li><strong>Emotions:</strong> Sad, Depressed, Bored</li>
+                <li><strong>Characteristics:</strong> Unpleasant and low energy</li>
+            </ul>
+            <strong>Quadrant 4 (Q4): High Valence, Low Arousal</strong>
+            <ul>
+                <li><strong>Emotions:</strong> Calm, Relaxed, Content</li>
+                <li><strong>Characteristics:</strong> Pleasant and low energy</li>
+            </ul>
+        </div>
+
+        <!-- Form Section -->
+        <h2>Upload an MP3 file and select an emotion</h2>
+        <form id="predictForm" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="emotion">Select Emotion:</label>
+            <select name="emotion" id="emotion" required>
+                <option value="Calm">Calm</option>
+                <option value="Happy">Happy</option>
+                <option value="Sad">Sad</option>
+                <option value="Energetic">Energetic</option>
+            </select>
+            
+            <label for="audio_file">Upload MP3:</label>
+            <input type="file" name="audio_file" id="audio_file" accept=".mp3" required>
+            
+            <button type="submit">Predict Emotion</button>
+        </form>
+        
+        <!-- Loading spinner and message -->
+        <div class="spinner" id="loadingSpinner"></div>
+        <div class="loading-message" id="loadingMessage">Processing your request, please wait...</div>
+    </div>
+
+    <script>
+        function toggleInstructions() {
+            var instructions = document.getElementById('instructions');
+            var toggleText = document.querySelector('.instructions-toggle');
+            if (instructions.style.display === 'none' || instructions.style.display === '') {
+                instructions.style.display = 'block';
+                toggleText.textContent = 'Hide Instructions';
+            } else {
+                instructions.style.display = 'none';
+                toggleText.textContent = 'Show Instructions';
+            }
+        }
+
+        document.getElementById('predictForm').addEventListener('submit', function() {
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('loadingMessage').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
