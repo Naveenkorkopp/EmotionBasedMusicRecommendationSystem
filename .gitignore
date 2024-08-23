@@ -116,7 +116,6 @@ __pypackages__/
 
 # Model files
 *.ckpt
-*.h5
 *.hdf5
 *.pt
 *.pth
